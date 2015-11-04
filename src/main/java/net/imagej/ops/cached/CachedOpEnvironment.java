@@ -241,37 +241,40 @@ public class CachedOpEnvironment extends CustomOpEnvironment {
 	 */
 	private class Hash {
 
-		private final int hash;
+		private final int totalHash;
+
+		private int inputHash;
 
 		private Class<?> delegate;
 
 		public Hash(final Object o1, final Class<?> delegate, final Object[] args) {
 			this.delegate = delegate;
+			this.inputHash = o1.hashCode();
 
 			// Implement hash joining algorithm from Jon Skeet on SO:
 			// http://stackoverflow.com/questions/263400/what-is-the-best-algorithm-for-an-overridden-system-object-gethashcode
 			long hash = 17;
 
-			hash = hash * 23 + o1.hashCode();
+			hash = hash * 23 + inputHash;
 			hash = hash * 23 + delegate.getSimpleName().hashCode();
 
 			for (final Object o : args) {
 				hash = hash * 23 + o.hashCode();
 			}
 
-			this.hash = (int) hash;
+			this.totalHash = (int) hash;
 		}
 
 		@Override
 		public int hashCode() {
-			return hash;
+			return totalHash;
 		}
 
 		@Override
 		public boolean equals(final Object obj) {
 			if (obj == this) return true;
 			if (obj instanceof Hash) return ((Hash) obj).delegate == delegate &&
-				((Hash) obj).hash == hash;
+				((Hash) obj).inputHash == inputHash;
 			return false;
 		}
 	}

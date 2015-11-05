@@ -22,6 +22,13 @@ ops = ```
 ```
 namespaces = ```
 [
+	[name: "coloc", iface: "Coloc", ops: [
+		[name: "costes",                      iface: "Costes"],
+		[name: "icq",                      	  iface: "ICQ"],
+		[name: "manders",                     iface: "Manders"],
+		[name: "pearsons",                    iface: "Pearsons"],
+		[name: "spearman",                    iface: "Spearman"],
+	]],
 	[name: "convert", iface: "Convert", ops: [
 		[name: "clip",                        iface: "Clip"],
 		[name: "copy",                        iface: "Copy"],

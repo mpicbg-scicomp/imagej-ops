@@ -243,23 +243,24 @@ public class CachedOpEnvironment extends CustomOpEnvironment {
 
 		private final int totalHash;
 
-		private int inputHash;
-
 		private Class<?> delegate;
+
+		private int[] allHashes;
 
 		public Hash(final Object o1, final Class<?> delegate, final Object[] args) {
 			this.delegate = delegate;
-			this.inputHash = o1.hashCode();
+			this.allHashes = new int[args.length + 1];
 
 			// Implement hash joining algorithm from Jon Skeet on SO:
 			// http://stackoverflow.com/questions/263400/what-is-the-best-algorithm-for-an-overridden-system-object-gethashcode
 			long hash = 17;
 
-			hash = hash * 23 + inputHash;
+			hash = hash * 23 + (allHashes[0] = o1.hashCode());
 			hash = hash * 23 + delegate.getSimpleName().hashCode();
 
+			int i = 1;
 			for (final Object o : args) {
-				hash = hash * 23 + o.hashCode();
+				hash = hash * 23 + (allHashes[i++] = o.hashCode());
 			}
 
 			this.totalHash = (int) hash;
@@ -273,8 +274,19 @@ public class CachedOpEnvironment extends CustomOpEnvironment {
 		@Override
 		public boolean equals(final Object obj) {
 			if (obj == this) return true;
-			if (obj instanceof Hash) return ((Hash) obj).delegate == delegate &&
-				((Hash) obj).inputHash == inputHash;
+			if (obj instanceof Hash) {
+				final Hash asHash = (Hash) obj;
+				if (asHash.delegate == delegate &&
+					asHash.allHashes.length == allHashes.length)
+				{
+					for (int i = 0; i < allHashes.length; i++) {
+						if (asHash.allHashes[i] != allHashes[i]) {
+							return false;
+						}
+					}
+					return true;
+				}
+			}
 			return false;
 		}
 	}

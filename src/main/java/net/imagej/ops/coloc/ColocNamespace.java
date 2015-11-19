@@ -40,6 +40,7 @@ import net.imagej.ops.OpMethod;
 import net.imagej.ops.Ops;
 import net.imagej.ops.filter.gauss.DefaultGaussRAI;
 import net.imagej.ops.filter.gauss.GaussRAISingleSigma;
+import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
@@ -57,13 +58,20 @@ import org.scijava.plugin.Plugin;
 
 /**
  * The coloc namespace contains ops that facilitate colocalization analysis.
- *
+ *b
  * @author Curtis Rueden
  */
 @Plugin(type = Namespace.class)
 public class ColocNamespace extends AbstractNamespace {
 
 	// -- icq --
+	
+	@OpMethod(op = net.imagej.ops.coloc.icq.LiICQ.class)
+	public <T extends RealType< T >> double icq(final IterableInterval<T> img1, final IterableInterval<T> img2, final double mean1, final double mean2) {
+		final double result =
+			(Double) ops().run(net.imagej.ops.coloc.icq.LiICQ.class, img1, img2, mean1, mean2);
+		return result;
+	}
 	
 	// -- Namespace methods --
 

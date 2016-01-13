@@ -78,7 +78,7 @@ namespaces = ```
 		[name: "dilate",                      iface: "Dilate"],
 		[name: "erode",                       iface: "Erode"],
 		[name: "open",                        iface: "Open"],
-		[name: "thin",                        iface: "Thin"],
+		[name: "thinning",                    iface: "Thinning"],
 	]],
 
 	[name: "filter", iface: "Filter", ops: [

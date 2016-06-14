@@ -264,6 +264,11 @@ public class AbstractFeatureTest extends AbstractOpTest {
 	protected static LabelRegion<String> createLabelRegion2D()
 		throws MalformedURLException, IOException
 	{
+		return createLabelRegions2D().getLabelRegion("1");
+
+	}
+
+	protected static LabelRegions<String> createLabelRegions2D() throws IOException {
 		final String imageName = expensiveTestsEnabled ? "cZgkFsK_expensive.png"
 			: "cZgkFsK.png";
 		// read simple polygon image
@@ -286,8 +291,7 @@ public class AbstractFeatureTest extends AbstractOpTest {
 		}
 
 		final LabelRegions<String> labelRegions = new LabelRegions<>(img);
-		return labelRegions.getLabelRegion("1");
-
+		return labelRegions;
 	}
 
 	protected static Img<FloatType> getTestImage3D() {

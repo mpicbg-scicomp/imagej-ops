@@ -40,7 +40,7 @@ import net.imagej.ops.features.sets.ComputerSet;
 import net.imagej.ops.features.sets.DefaultFirstOrderStatsComputerSet;
 import net.imagej.ops.features.sets.DefaultGeometric2DComputerSet;
 import net.imagej.ops.features.sets.DefaultZernikeComputerSet;
-import net.imagej.ops.geom.geom3d.mesh.Vertex;
+import net.imagej.ops.special.computer.Computers;
 import net.imglib2.RealPoint;
 import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgFactory;
@@ -82,16 +82,16 @@ public class ComputerSetProcessorUtils {
 	}
 
 	/**
-	 * Concatenate featureset name with feature name.
+	 * Concatenate {@link ComputerSet} name with feature name.
 	 * 
-	 * @param featuresetName
-	 *            the name of the featureset
-	 * @param featureName
-	 *            the name of the feature
+	 * @param computerSetName
+	 *            the name of the {@link ComputerSet}
+	 * @param computerName
+	 *            the name of the {@link Computers}
 	 * @return the concatenated string
 	 */
-	public static String getFeatureTableName(final String featuresetName, final String featureName) {
-		return featuresetName + "_" + featureName;
+	public static String getFeatureTableName(final String computerSetName, final String computerName) {
+		return computerSetName + "_" + computerName;
 	}
 
 	/**
@@ -99,17 +99,17 @@ public class ComputerSetProcessorUtils {
 	 * {@link ComputerSet} has a duplicate the suffix "[i]" (i = 0,...) is
 	 * added.
 	 *
-	 * @param featuresets
+	 * @param computerSets
 	 *            for which unique names are required
-	 * @return map from featuresets to unique names
+	 * @return map from computerSets to unique names
 	 */
-	public static <O> Map<ComputerSet<?, O>, String> getUniqueNames(final List<ComputerSet<?, O>> featuresets) {
+	public static <O> Map<ComputerSet<?, O>, String> getUniqueNames(final List<ComputerSet<?, O>> computerSets) {
 
 		final Map<ComputerSet<?, O>, String> names = new HashMap<>();
 
-		for (final ComputerSet<?, O> fs : featuresets) {
-			final String n = uniqueName(names.values(), fs.getClass().getSimpleName());
-			names.put(fs, n);
+		for (final ComputerSet<?, O> computerSet : computerSets) {
+			final String n = uniqueName(names.values(), computerSet.getClass().getSimpleName());
+			names.put(computerSet, n);
 		}
 
 		return names;

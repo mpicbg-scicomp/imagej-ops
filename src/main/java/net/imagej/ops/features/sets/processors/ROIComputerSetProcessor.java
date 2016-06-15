@@ -41,6 +41,7 @@ import net.imagej.ops.Op;
 import net.imagej.ops.features.sets.ComputerSet;
 import net.imagej.ops.features.sets.tables.ComputerSetTableService;
 import net.imagej.ops.features.sets.tables.DefaultTable;
+import net.imagej.ops.special.computer.Computers;
 import net.imagej.table.Column;
 import net.imagej.table.Table;
 import net.imglib2.RandomAccessible;
@@ -55,27 +56,27 @@ import org.scijava.plugin.Plugin;
 /**
  * A ROIProcessor holds {@link ComputerSet}s and
  * {@link ROIComputerSetProcessor#compute2(RandomAccessible, LabelRegions, Table)}
- * computes the features on the sampled {@link LabelRegion} of I and returns a
+ * computes the {@link Computers} on the sampled {@link LabelRegion} of I and returns a
  * {@link DefaultTable}.
  *
  * The {@link DefaultTable} holds for each {@link LabelRegion} a row and has as
- * many columns as features were calculated.
+ * many columns as {@link Computers} were calculated.
  *
  * @author Tim-Oliver Buchholz, University of Konstanz
  *
  * @param <T>
- *            type of the RandomAccessible
+ *            type of the {@link RandomAccessible}
  * @param <S>
- *            type of the LabelRegions
+ *            type of the {@link LabelRegions}
  * @param <O>
- *            output type of the features
+ *            output type of the {@link Computers}
  */
 @Plugin(type = Op.class)
 public class ROIComputerSetProcessor<T extends Type<T>, S, O extends Type<O>>
 		extends AbstractBinaryComputerSetProcessor<RandomAccessible<T>, LabelRegions<S>, Iterable<T>, O> {
 
 	@Parameter
-	private ComputerSetTableService<O> fs;
+	private ComputerSetTableService<O> csts;
 
 	/**
 	 * Maps each {@link ComputerSet} to a unique name. This ensures unique
@@ -85,8 +86,8 @@ public class ROIComputerSetProcessor<T extends Type<T>, S, O extends Type<O>>
 
 	@Override
 	public Table<Column<O>, O> createOutput(final RandomAccessible<T> input1, final LabelRegions<S> input2) {
-		names = ComputerSetProcessorUtils.getUniqueNames(Arrays.asList(sets));
-		return fs.createTable(sets, names, input2.getExistingLabels().size());
+		names = ComputerSetProcessorUtils.getUniqueNames(Arrays.asList(computerSets));
+		return csts.createTable(computerSets, names, input2.getExistingLabels().size());
 	}
 
 	@Override
@@ -103,10 +104,10 @@ public class ROIComputerSetProcessor<T extends Type<T>, S, O extends Type<O>>
 			futures.add(es.submit(new Callable<Void>() {
 				@Override
 				public Void call() throws Exception {
-					for (final ComputerSet<Iterable<T>, O> featureset : sets) {
-						final Map<String, O> result = featureset.compute1(roi);
+					for (final ComputerSet<Iterable<T>, O> computerSet : computerSets) {
+						final Map<String, O> result = computerSet.compute1(roi);
 						for (final String name : result.keySet()) {
-							output.set(ComputerSetProcessorUtils.getFeatureTableName(names.get(featureset), name), j,
+							output.set(ComputerSetProcessorUtils.getFeatureTableName(names.get(computerSet), name), j,
 									result.get(name));
 						}
 					}

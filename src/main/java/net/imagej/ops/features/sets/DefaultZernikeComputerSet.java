@@ -67,7 +67,7 @@ public class DefaultZernikeComputerSet extends AbstractConfigurableComputerSet<I
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Class<? extends Op>[] getFeatures() {
+	public Class<? extends Op>[] getComputers() {
 		return new Class[] { Phase.class, Magnitude.class };
 	}
 

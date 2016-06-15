@@ -58,13 +58,13 @@ public class DefaultComputerSetTableService<O extends Type<O>> implements Comput
 	}
 
 	@Override
-	public Table<Column<O>, O> createTable(final ComputerSet<?, O>[] featuresets,
+	public Table<Column<O>, O> createTable(final ComputerSet<?, O>[] computerSets,
 			final Map<ComputerSet<?, O>, String> names, final int numRows) {
-		for (final ComputerSet<?, O> fs : featuresets) {
-			final String fsName = names.get(fs);
+		for (final ComputerSet<?, O> computerSet : computerSets) {
+			final String computerSetName = names.get(computerSet);
 
-			for (final String n : fs.getComputerNames()) {
-				table.appendColumn(ComputerSetProcessorUtils.getFeatureTableName(fsName, n));
+			for (final String computerName : computerSet.getComputerNames()) {
+				table.appendColumn(ComputerSetProcessorUtils.getFeatureTableName(computerSetName, computerName));
 
 			}
 		}

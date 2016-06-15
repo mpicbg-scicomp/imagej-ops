@@ -32,11 +32,11 @@ package net.imagej.ops.features.sets;
 import java.util.List;
 
 import net.imagej.ops.Op;
-import net.imagej.ops.special.function.Functions;
+import net.imagej.ops.special.computer.Computers;
 
 /**
  * A {@link ConfigurableComputerSet} can be initialized with only a subset of
- * activated {@link Functions}.
+ * activated {@link Computers}.
  *
  * @author Tim-Oliver Buchholz, University of Konstanz
  *
@@ -48,27 +48,27 @@ import net.imagej.ops.special.function.Functions;
 public interface ConfigurableComputerSet<I, O> extends ComputerSet<I, O> {
 
 	/**
-	 * Get the activation state of a {@link Functions} of this
+	 * Get the activation state of a {@link Computers} of this
 	 * {@link ConfigurableComputerSet}.
 	 *
-	 * @param function
-	 *            the {@link Functions} to check.
-	 * @return the activation state of this {@link Functions}
+	 * @param computer
+	 *            the {@link Computers} to check.
+	 * @return the activation state of this {@link Computers}
 	 */
-	boolean isActive(final Class<? extends Op> function);
+	boolean isActive(final Class<? extends Op> computer);
 
 	/**
-	 * Get all active {@link Functions} of this {@link ConfigurableComputerSet}.
+	 * Get all active {@link Computers} of this {@link ConfigurableComputerSet}.
 	 *
-	 * @return the active {@link Functions}
+	 * @return the active {@link Computers}
 	 */
 	List<Class<? extends Op>> getActive();
 
 	/**
-	 * Get all inactive {@link Functions} of this
+	 * Get all inactive {@link Computers} of this
 	 * {@link ConfigurableComputerSet}.
 	 *
-	 * @return the inactive {@link Functions}
+	 * @return the inactive {@link Computers}
 	 */
 	List<Class<? extends Op>> getInactive();
 

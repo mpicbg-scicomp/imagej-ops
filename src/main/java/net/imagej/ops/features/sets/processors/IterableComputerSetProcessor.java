@@ -41,6 +41,7 @@ import net.imagej.ops.Op;
 import net.imagej.ops.features.sets.ComputerSet;
 import net.imagej.ops.features.sets.tables.ComputerSetTableService;
 import net.imagej.ops.features.sets.tables.DefaultTable;
+import net.imagej.ops.special.computer.Computers;
 import net.imagej.table.Column;
 import net.imagej.table.Table;
 import net.imglib2.type.Type;
@@ -51,10 +52,10 @@ import org.scijava.plugin.Plugin;
 /**
  * An IterableProcessor holds {@link ComputerSet}s and
  * {@link IterableComputerSetProcessor#compute1(Iterable, Table)}
- * computes the features on the given {@link Iterable} and returns a
+ * computes the {@link Computers} on the given {@link Iterable} and returns a
  * {@link DefaultTable}.
  *
- * The {@link DefaultTable} has one row and as many columns as features were
+ * The {@link DefaultTable} has one row and as many columns as {@link Computers} were
  * calculated.
  *
  * @author Tim-Oliver Buchholz, University of Konstanz
@@ -62,14 +63,14 @@ import org.scijava.plugin.Plugin;
  * @param <I>
  *            Iterable type
  * @param <O>
- *            Output type of the features.
+ *            Output type of the {@link Computers}.
  */
 @Plugin(type = Op.class)
 public class IterableComputerSetProcessor<I, O extends Type<O>>
 		extends AbstractUnaryComputerSetProcessor<Iterable<I>, Iterable<I>, O> {
 
 	@Parameter
-	private ComputerSetTableService<O> fs;
+	private ComputerSetTableService<O> csts;
 
 	/**
 	 * Maps each {@link ComputerSet} to a unique name. This ensures unique
@@ -84,8 +85,8 @@ public class IterableComputerSetProcessor<I, O extends Type<O>>
 
 	@Override
 	public Table<Column<O>, O> createOutput(final Iterable<I> input1) {
-		names = ComputerSetProcessorUtils.getUniqueNames(Arrays.asList(sets));
-		return fs.createTable(sets, names, 1);
+		names = ComputerSetProcessorUtils.getUniqueNames(Arrays.asList(computerSets));
+		return csts.createTable(computerSets, names, 1);
 	}
 
 	@Override
@@ -93,14 +94,14 @@ public class IterableComputerSetProcessor<I, O extends Type<O>>
 
 		final List<Future<Void>> futures = new ArrayList<>();
 
-		for (final ComputerSet<Iterable<I>, O> featureset : sets) {
+		for (final ComputerSet<Iterable<I>, O> computerSet : computerSets) {
 
 			futures.add(es.submit(new Callable<Void>() {
 				@Override
 				public Void call() throws Exception {
-					final Map<String, O> result = featureset.compute1(input1);
+					final Map<String, O> result = computerSet.compute1(input1);
 					for (final String name : result.keySet()) {
-						output.set(ComputerSetProcessorUtils.getFeatureTableName(names.get(featureset), name), 0,
+						output.set(ComputerSetProcessorUtils.getFeatureTableName(names.get(computerSet), name), 0,
 								result.get(name));
 					}
 					return null;

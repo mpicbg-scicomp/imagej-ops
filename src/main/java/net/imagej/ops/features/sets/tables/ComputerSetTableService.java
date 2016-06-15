@@ -33,6 +33,7 @@ import java.util.Map;
 
 import net.imagej.ops.features.sets.ComputerSet;
 import net.imagej.ops.features.sets.processors.ComputerSetProcessor;
+import net.imagej.ops.special.computer.Computers;
 import net.imagej.table.Column;
 import net.imagej.table.Table;
 import net.imglib2.type.Type;
@@ -51,14 +52,14 @@ public interface ComputerSetTableService<O extends Type<O>> {
 	 * Create a new {@link Table} to store the results of a
 	 * {@link ComputerSetProcessor}.
 	 *
-	 * @param featuresets
+	 * @param computerSets
 	 *            of the {@link ComputerSetProcessor}
 	 * @param names
 	 *            a map which maps a unique name to each {@link ComputerSet}
 	 * @param numRows
 	 *            number of rows
-	 * @return a table with a column for each feature and numRows rows.
+	 * @return a table with a column for each {@link Computers} and numRows rows.
 	 */
-	public Table<Column<O>, O> createTable(final ComputerSet<?, O>[] featuresets,
+	public Table<Column<O>, O> createTable(final ComputerSet<?, O>[] computerSets,
 			final Map<ComputerSet<?, O>, String> names, final int numRows);
 }

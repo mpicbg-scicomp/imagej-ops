@@ -41,6 +41,7 @@ import net.imagej.ops.Op;
 import net.imagej.ops.features.sets.ComputerSet;
 import net.imagej.ops.features.sets.tables.ComputerSetTableService;
 import net.imagej.ops.features.sets.tables.DefaultTable;
+import net.imagej.ops.special.computer.Computers;
 import net.imagej.table.Column;
 import net.imagej.table.Table;
 import net.imglib2.roi.labeling.LabelRegion;
@@ -53,27 +54,27 @@ import org.scijava.plugin.Plugin;
 /**
  * A LabelRegionsProcessor holds {@link ComputerSet}s and
  * {@link LabelRegionsComputerSetProcessor#compute1(LabelRegions, Table)}
- * computes the features on the given {@link LabelRegions} and returns a
+ * computes the {@link Computers} on the given {@link LabelRegions} and returns a
  * {@link DefaultTable}.
  *
  * The {@link DefaultTable} holds for each {@link LabelRegion} a row and has as
- * many columns as features were calculated.
+ * many columns as {@link Computers} were calculated.
  *
  * @author Tim-Oliver Buchholz, University of Konstanz
  *
  * @param <S>
  *            LabelRegions type
  * @param <F>
- *            Type of the converted LabelRegion
+ *            Type of the converted {@link LabelRegion}
  * @param <O>
- *            Output type of the features.
+ *            Output type of the {@link Computers}.
  */
 @Plugin(type = Op.class)
 public class LabelRegionsComputerSetProcessor<S, F, O extends Type<O>>
 		extends AbstractUnaryComputerSetProcessor<LabelRegions<S>, F, O> {
 
 	@Parameter
-	private ComputerSetTableService<O> fs;
+	private ComputerSetTableService<O> csts;
 
 	/**
 	 * Maps each {@link ComputerSet} to a unique name. This ensures unique
@@ -83,8 +84,8 @@ public class LabelRegionsComputerSetProcessor<S, F, O extends Type<O>>
 
 	@Override
 	public Table<Column<O>, O> createOutput(final LabelRegions<S> input1) {
-		names = ComputerSetProcessorUtils.getUniqueNames(Arrays.asList(sets));
-		return fs.createTable(sets, names, input1.getExistingLabels().size());
+		names = ComputerSetProcessorUtils.getUniqueNames(Arrays.asList(computerSets));
+		return csts.createTable(computerSets, names, input1.getExistingLabels().size());
 	}
 
 	@Override
@@ -99,11 +100,11 @@ public class LabelRegionsComputerSetProcessor<S, F, O extends Type<O>>
 			futures.add(es.submit(new Callable<Void>() {
 				@Override
 				public Void call() throws Exception {
-					for (final ComputerSet<F, O> featureset : sets) {
+					for (final ComputerSet<F, O> computerSet : computerSets) {
 						// LabelRegion has to be converted to Polygon or Mesh.
-						final Map<String, O> result = featureset.compute1(cs.convert(r, featureset.getInType()));
+						final Map<String, O> result = computerSet.compute1(cs.convert(r, computerSet.getInType()));
 						for (final String name : result.keySet()) {
-							output.set(ComputerSetProcessorUtils.getFeatureTableName(names.get(featureset), name), j,
+							output.set(ComputerSetProcessorUtils.getFeatureTableName(names.get(computerSet), name), j,
 									result.get(name));
 						}
 					}

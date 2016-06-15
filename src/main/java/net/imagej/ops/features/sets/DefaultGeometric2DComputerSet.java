@@ -66,7 +66,7 @@ public class DefaultGeometric2DComputerSet extends AbstractConfigurableComputerS
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Class<? extends Op>[] getFeatures() {
+	public Class<? extends Op>[] getComputers() {
 		return new Class[] { Boxivity.class, Convexity.class, Circularity.class, Eccentricity.class,
 				MainElongation.class, FeretsAngle.class, FeretsDiameter.class, MajorAxis.class, MinorAxis.class,
 				BoundarySize.class, Roundness.class, Rugosity.class, Solidity.class, Size.class };

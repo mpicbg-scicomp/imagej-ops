@@ -131,7 +131,7 @@ public abstract class AbstractComputerSet<I, O extends Type<O>> extends Abstract
 
 	/**
 	 * Set {@link CustomOpEnvironment} and create all computers of this
-	 * featureset.
+	 * {@link ComputerSet}.
 	 *
 	 * @param infos
 	 *            for the {@link CustomOpEnvironment}
@@ -140,17 +140,17 @@ public abstract class AbstractComputerSet<I, O extends Type<O>> extends Abstract
 		if (infos != null) {
 			setEnvironment(new CustomOpEnvironment(ops(), infos));
 		}
-		for (final Class<? extends Op> feature : getFeatures()) {
-			addComputer(feature);
+		for (final Class<? extends Op> computer : getComputers()) {
+			addComputer(computer);
 		}
 	}
 
 	/**
-	 * Create computer and output object for the computer. Add both to the
+	 * Create instance and output object for the {@link Computers}. Add both to the
 	 * datastructures.
 	 *
 	 * @param clazz
-	 *            the class of the computer
+	 *            the class of the {@link Computers}
 	 */
 	protected void addComputer(final Class<? extends Op> clazz) {
 		@SuppressWarnings("unchecked")
@@ -179,7 +179,7 @@ public abstract class AbstractComputerSet<I, O extends Type<O>> extends Abstract
 	 */
 	@Override
 	public Class<? extends Op>[] getComputedFeatures() {
-		return getFeatures();
+		return getComputers();
 	}
 
 	/**
@@ -187,7 +187,7 @@ public abstract class AbstractComputerSet<I, O extends Type<O>> extends Abstract
 	 */
 	@Override
 	public String[] getComputerNames() {
-		return Arrays.asList(getFeatures()).stream().map(a -> a.getSimpleName()).collect(Collectors.toList())
+		return Arrays.asList(getComputers()).stream().map(a -> a.getSimpleName()).collect(Collectors.toList())
 				.toArray(new String[computers.size()]);
 	}
 

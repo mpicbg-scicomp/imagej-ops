@@ -73,7 +73,7 @@ public class DefaultHistogramComputerSet extends AbstractComputerSet<Iterable, L
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Class<? extends Op>[] getFeatures() {
+	public Class<? extends Op>[] getComputers() {
 		return new Class[] { HistogramCreate.class };
 	}
 

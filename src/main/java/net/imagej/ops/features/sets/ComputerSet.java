@@ -54,7 +54,7 @@ public interface ComputerSet<I, O> extends UnaryFunctionOp<I, Map<String, O>> {
 	 *
 	 * @return all {@link Computers} of this {@link ComputerSet}
 	 */
-	Class<? extends Op>[] getFeatures();
+	Class<? extends Op>[] getComputers();
 
 	/**
 	 * The {@link Computers} which were computed by this {@link ComputerSet}.

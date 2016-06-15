@@ -84,7 +84,7 @@ public class DefaultFirstOrderStatsComputerSet extends AbstractConfigurableCompu
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Class<? extends Op>[] getFeatures() {
+	public Class<? extends Op>[] getComputers() {
 		return new Class[] { GeometricMean.class, HarmonicMean.class, Kurtosis.class, Mean.class, Median.class,
 				Min.class, Max.class, Moment1AboutMean.class, Moment2AboutMean.class, Moment3AboutMean.class,
 				Moment4AboutMean.class, Size.class, Skewness.class, StdDev.class, Sum.class, SumOfInverses.class,

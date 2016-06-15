@@ -47,15 +47,15 @@ import org.scijava.thread.ThreadService;
  * @param <I>
  *            Type of the input object.
  * @param <F>
- *            Inputtype of the featuresets.
+ *            Inputtype of the {@link ComputerSet}.
  * @param <O>
- *            Outputtype of the featuresets.
+ *            Outputtype of the {@link ComputerSet}.
  */
 public abstract class AbstractUnaryComputerSetProcessor<I, F, O extends Type<O>>
 		extends AbstractUnaryHybridCF<I, Table<Column<O>, O>> implements ComputerSetProcessor<I, O> {
 
 	@Parameter
-	protected ComputerSet<F, O>[] sets;
+	protected ComputerSet<F, O>[] computerSets;
 
 	@Parameter
 	protected ThreadService ts;

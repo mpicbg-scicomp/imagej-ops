@@ -112,14 +112,14 @@ public abstract class AbstractConfigurableComputerSet<I, O extends Type<O>> exte
 	@Override
 	public void initialize() {
 		if (active.isEmpty()) {
-			active.addAll(Arrays.asList(getFeatures()));
+			active.addAll(Arrays.asList(getComputers()));
 		}
 		super.initialize();
 	}
 
 	/**
 	 * Set {@link CustomOpEnvironment} and create all computers of this
-	 * featureset and activate passed {@link Computers}.
+	 * {@link ComputerSet} and activate passed {@link Computers}.
 	 *
 	 * @param infos
 	 *            for the {@link CustomOpEnvironment}
@@ -130,12 +130,12 @@ public abstract class AbstractConfigurableComputerSet<I, O extends Type<O>> exte
 			setEnvironment(new CustomOpEnvironment(ops(), infos));
 		}
 
-		for (final Class<? extends Op> feature : getFeatures()) {
-			if (active.contains(feature)) {
-				activated.put(feature, true);
-				addComputer(feature);
+		for (final Class<? extends Op> computer : getComputers()) {
+			if (active.contains(computer)) {
+				activated.put(computer, true);
+				addComputer(computer);
 			} else {
-				activated.put(feature, false);
+				activated.put(computer, false);
 			}
 		}
 	}

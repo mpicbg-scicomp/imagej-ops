@@ -31,6 +31,7 @@
 package net.imagej.ops.features.sets.processors;
 
 import net.imagej.ops.features.sets.ComputerSet;
+import net.imagej.ops.special.computer.Computers;
 import net.imagej.ops.special.hybrid.UnaryHybridCF;
 import net.imagej.table.Column;
 import net.imagej.table.Table;
@@ -38,15 +39,15 @@ import net.imglib2.type.Type;
 
 /**
  * A {@link ComputerSetProcessor} holds arbitrary many {@link ComputerSet} of
- * the same types. All active features from every {@link ComputerSet} are
- * compute on the input object and written to a FeatureTable.
+ * the same types. All active {@link Computers} from every {@link ComputerSet} are
+ * computed on the input object and written to a {@link Table}.
  *
  * @author Tim-Oliver Buchholz, University of Konstanz
  *
  * @param <I>
  *            Input type
  * @param <O>
- *            Output type of the features
+ *            Output type of the {@link Computers}.
  */
 public interface ComputerSetProcessor<I, O extends Type<O>> extends UnaryHybridCF<I, Table<Column<O>, O>> {
 	// NB: Marker Interface

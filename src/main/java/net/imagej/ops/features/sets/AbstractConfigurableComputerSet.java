@@ -145,7 +145,7 @@ public abstract class AbstractConfigurableComputerSet<I, O extends Type<O>> exte
 	 */
 	@Override
 	public Map<String, O> compute1(final I input) {
-		for (final UnaryComputerOp<I, O> computer : activated.entrySet().stream().filter(a -> a.getValue())
+		for (final UnaryComputerOp<I, O> computer : activated.entrySet().parallelStream().filter(a -> a.getValue())
 				.map(a -> computers.get(a.getKey())).collect(Collectors.toList())) {
 			computer.compute1(input, computer.out());
 		}

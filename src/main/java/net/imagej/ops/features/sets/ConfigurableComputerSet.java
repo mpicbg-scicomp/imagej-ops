@@ -47,22 +47,6 @@ import net.imagej.ops.special.computer.Computers;
  */
 public interface ConfigurableComputerSet<I, O> extends ComputerSet<I, O> {
 
-	/**
-	 * Get the activation state of a {@link Computers} of this
-	 * {@link ConfigurableComputerSet}.
-	 *
-	 * @param computer
-	 *            the {@link Computers} to check.
-	 * @return the activation state of this {@link Computers}
-	 */
-	boolean isActive(final Class<? extends Op> computer);
-
-	/**
-	 * Get all active {@link Computers} of this {@link ConfigurableComputerSet}.
-	 *
-	 * @return the active {@link Computers}
-	 */
-	List<Class<? extends Op>> getActive();
 
 	/**
 	 * Get all inactive {@link Computers} of this
@@ -70,6 +54,6 @@ public interface ConfigurableComputerSet<I, O> extends ComputerSet<I, O> {
 	 *
 	 * @return the inactive {@link Computers}
 	 */
-	List<Class<? extends Op>> getInactive();
-
+	List<Class<? extends Op>> getInactiveComputers();
+	
 }

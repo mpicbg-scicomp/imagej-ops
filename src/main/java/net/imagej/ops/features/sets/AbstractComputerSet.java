@@ -30,9 +30,11 @@
 
 package net.imagej.ops.features.sets;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -173,13 +175,10 @@ public abstract class AbstractComputerSet<I, O extends Type<O>> extends Abstract
 
 		return namedOutputs;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
-	public Class<? extends Op>[] getComputedFeatures() {
-		return getComputers();
+	public List<Class<? extends Op>> getActiveComputers() {
+		return Arrays.asList(getComputers());
 	}
 
 	/**

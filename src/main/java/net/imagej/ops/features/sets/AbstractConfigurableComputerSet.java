@@ -157,31 +157,14 @@ public abstract class AbstractConfigurableComputerSet<I, O extends Type<O>> exte
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isActive(final Class<? extends Op> feature) {
-		return activated.get(feature);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<Class<? extends Op>> getActive() {
+	public List<Class<? extends Op>> getActiveComputers() {
 		return activated.entrySet().stream().filter(e -> e.getValue()).map(e -> e.getKey())
 				.collect(Collectors.toList());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public Class<? extends Op>[] getComputedFeatures() {
-		return getActive().toArray(new Class[(int) activated.values().stream().filter(a -> a.booleanValue()).count()]);
-	}
-
 	@Override
 	public String[] getComputerNames() {
-		return getActive().stream().map(a -> a.getSimpleName()).collect(Collectors.toList())
+		return getActiveComputers().stream().map(a -> a.getSimpleName()).collect(Collectors.toList())
 				.toArray(new String[computers.size()]);
 	}
 
@@ -189,7 +172,7 @@ public abstract class AbstractConfigurableComputerSet<I, O extends Type<O>> exte
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Class<? extends Op>> getInactive() {
+	public List<Class<? extends Op>> getInactiveComputers() {
 		return activated.entrySet().stream().filter(e -> !e.getValue()).map(e -> e.getKey())
 				.collect(Collectors.toList());
 	}

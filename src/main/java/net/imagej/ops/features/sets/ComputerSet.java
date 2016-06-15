@@ -30,6 +30,7 @@
 
 package net.imagej.ops.features.sets;
 
+import java.util.List;
 import java.util.Map;
 
 import net.imagej.ops.Op;
@@ -48,21 +49,7 @@ import net.imagej.ops.special.function.UnaryFunctionOp;
  *            type of the common output
  */
 public interface ComputerSet<I, O> extends UnaryFunctionOp<I, Map<String, O>> {
-
-	/**
-	 * The {@link Computers} which define this {@link ComputerSet}.
-	 *
-	 * @return all {@link Computers} of this {@link ComputerSet}
-	 */
-	Class<? extends Op>[] getComputers();
-
-	/**
-	 * The {@link Computers} which were computed by this {@link ComputerSet}.
-	 *
-	 * @return the computed {@link Computers} of this {@link ComputerSet}.
-	 */
-	Class<? extends Op>[] getComputedFeatures();
-
+	
 	/**
 	 * The input type of the {@link Computers} of this {@link ComputerSet}.
 	 *
@@ -71,10 +58,24 @@ public interface ComputerSet<I, O> extends UnaryFunctionOp<I, Map<String, O>> {
 	Class<I> getInType();
 
 	/**
-	 * An array of the names of all computers which will be executed.
+	 * The {@link Computers} which define this {@link ComputerSet}.
 	 *
-	 * @return the names of all active computers.
+	 * @return all {@link Computers} of this {@link ComputerSet}
+	 */
+	Class<? extends Op>[] getComputers();
+	
+	/**
+	 * An array of the names of all {@link Computers} which will be executed.
+	 *
+	 * @return the names of all active {@link Computers}.
 	 */
 	String[] getComputerNames();
+	
+	/**
+	 * Get all active {@link Computers} of this {@link ComputerSet}.
+	 *
+	 * @return the active {@link Computers}
+	 */
+	List<Class<? extends Op>> getActiveComputers();
 
 }

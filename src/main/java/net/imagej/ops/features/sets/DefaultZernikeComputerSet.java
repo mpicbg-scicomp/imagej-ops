@@ -100,7 +100,7 @@ public class DefaultZernikeComputerSet extends AbstractConfigurableComputerSet<I
 	@Override
 	public String[] getComputerNames() {
 		final List<String> names = new ArrayList<>();
-		for (final Class<? extends Op> clazz : getActive()) {
+		for (final Class<? extends Op> clazz : getActiveComputers()) {
 			for (int order = orderMin; order <= orderMax; order++) {
 				for (int repetition = 0; repetition <= order; repetition++) {
 					if (Math.abs(order - repetition) % 2 == 0) {

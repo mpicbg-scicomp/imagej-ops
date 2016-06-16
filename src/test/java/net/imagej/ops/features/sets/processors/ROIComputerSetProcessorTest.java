@@ -39,8 +39,7 @@ import net.imagej.ops.Ops.Stats.Mean;
 import net.imagej.ops.features.sets.ComputerSet;
 import net.imagej.ops.features.sets.FirstOrderStatsComputerSet;
 import net.imagej.ops.features.sets.tables.DefaultComputerSetTableService;
-import net.imagej.table.Column;
-import net.imagej.table.Table;
+import net.imagej.table.GenericTable;
 import net.imglib2.RandomAccessible;
 import net.imglib2.roi.labeling.LabelRegions;
 import net.imglib2.type.numeric.real.DoubleType;
@@ -66,11 +65,11 @@ public class ROIComputerSetProcessorTest extends AbstractComputerSetProcessorTes
 				RandomAccessible.class, LabelRegions.class, new ComputerSet[] { stats },
 				new DefaultComputerSetTableService<>());
 
-		Table<Column<DoubleType>, DoubleType> result = processor.compute2(getTestImage2D(), createLabelRegions2D());
+		GenericTable result = processor.compute2(getTestImage2D(), createLabelRegions2D());
 
-		List<ComputerSet<?, DoubleType>> tmp = new ArrayList<>();
-		tmp.add(stats);
-		checkAllResultTableForOneComputerSet(result, tmp);
+		List<ComputerSet<?, DoubleType>> computerSets = new ArrayList<>();
+		computerSets.add(stats);
+		checkAllResultTableForOneComputerSet(result, computerSets, 1);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -83,11 +82,11 @@ public class ROIComputerSetProcessorTest extends AbstractComputerSetProcessorTes
 				RandomAccessible.class, LabelRegions.class, new ComputerSet[] { stats },
 				new DefaultComputerSetTableService<>());
 
-		Table<Column<DoubleType>, DoubleType> result = processor.compute2(getTestImage2D(), createLabelRegions2D());
+		GenericTable result = processor.compute2(getTestImage2D(), createLabelRegions2D());
 
-		List<ComputerSet<?, DoubleType>> tmp = new ArrayList<>();
-		tmp.add(stats);
-		checkAllResultTableForOneComputerSet(result, tmp);
+		List<ComputerSet<?, DoubleType>> computerSets = new ArrayList<>();
+		computerSets.add(stats);
+		checkAllResultTableForOneComputerSet(result, computerSets, 1);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -102,12 +101,12 @@ public class ROIComputerSetProcessorTest extends AbstractComputerSetProcessorTes
 				RandomAccessible.class, LabelRegions.class, new ComputerSet[] { stats, stats1 },
 				new DefaultComputerSetTableService<>());
 
-		Table<Column<DoubleType>, DoubleType> result = processor.compute2(getTestImage2D(), createLabelRegions2D());
+		GenericTable result = processor.compute2(getTestImage2D(), createLabelRegions2D());
 
-		List<ComputerSet<?, DoubleType>> tmp = new ArrayList<>();
-		tmp.add(stats);
-		tmp.add(stats1);
-		checkResultTableForManyComputerSets(result, tmp);
+		List<ComputerSet<?, DoubleType>> computerSets = new ArrayList<>();
+		computerSets.add(stats);
+		computerSets.add(stats1);
+		checkResultTableForManyComputerSets(result, computerSets, 1);
 	}
 
 }

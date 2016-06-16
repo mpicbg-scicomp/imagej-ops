@@ -38,8 +38,7 @@ import net.imagej.ops.Ops.Stats.Mean;
 import net.imagej.ops.features.sets.ComputerSet;
 import net.imagej.ops.features.sets.FirstOrderStatsComputerSet;
 import net.imagej.ops.features.sets.tables.DefaultComputerSetTableService;
-import net.imagej.table.Column;
-import net.imagej.table.Table;
+import net.imagej.table.GenericTable;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 
@@ -62,11 +61,11 @@ public class IterableComputerSetProcessorTest extends AbstractComputerSetProcess
 		IterableComputerSetProcessor<FloatType, DoubleType> processor = ops.op(IterableComputerSetProcessor.class,
 				Iterable.class, new ComputerSet[] { stats }, new DefaultComputerSetTableService<>());
 
-		Table<Column<DoubleType>, DoubleType> result = processor.compute1(getTestImage2D());
+		GenericTable result = processor.compute1(getTestImage2D());
 
-		List<ComputerSet<?, DoubleType>> tmp = new ArrayList<>();
-		tmp.add(stats);
-		checkAllResultTableForOneComputerSet(result, tmp);
+		List<ComputerSet<?, DoubleType>> computerSets = new ArrayList<>();
+		computerSets.add(stats);
+		checkAllResultTableForOneComputerSet(result, computerSets, 0);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -78,11 +77,11 @@ public class IterableComputerSetProcessorTest extends AbstractComputerSetProcess
 		IterableComputerSetProcessor<FloatType, DoubleType> processor = ops.op(IterableComputerSetProcessor.class,
 				Iterable.class, new ComputerSet[] { stats }, new DefaultComputerSetTableService<>());
 
-		Table<Column<DoubleType>, DoubleType> result = processor.compute1(getTestImage2D());
+		GenericTable result = processor.compute1(getTestImage2D());
 
-		List<ComputerSet<?, DoubleType>> tmp = new ArrayList<>();
-		tmp.add(stats);
-		checkAllResultTableForOneComputerSet(result, tmp);
+		List<ComputerSet<?, DoubleType>> computerSets = new ArrayList<>();
+		computerSets.add(stats);
+		checkAllResultTableForOneComputerSet(result, computerSets, 0);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -96,12 +95,12 @@ public class IterableComputerSetProcessorTest extends AbstractComputerSetProcess
 		IterableComputerSetProcessor<FloatType, DoubleType> processor = ops.op(IterableComputerSetProcessor.class,
 				Iterable.class, new ComputerSet[] { stats, stats1 }, new DefaultComputerSetTableService<>());
 
-		Table<Column<DoubleType>, DoubleType> result = processor.compute1(getTestImage2D());
+		GenericTable result = processor.compute1(getTestImage2D());
 
-		List<ComputerSet<?, DoubleType>> tmp = new ArrayList<>();
-		tmp.add(stats);
-		tmp.add(stats1);
-		checkResultTableForManyComputerSets(result, tmp);
+		List<ComputerSet<?, DoubleType>> computerSets = new ArrayList<>();
+		computerSets.add(stats);
+		computerSets.add(stats1);
+		checkResultTableForManyComputerSets(result, computerSets, 0);
 	}
 
 }

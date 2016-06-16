@@ -34,8 +34,7 @@ import java.util.Map;
 
 import net.imagej.ops.features.AbstractFeatureTest;
 import net.imagej.ops.features.sets.ComputerSet;
-import net.imagej.table.Column;
-import net.imagej.table.Table;
+import net.imagej.table.GenericTable;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.Assert;
@@ -47,26 +46,46 @@ import org.junit.Assert;
  */
 public abstract class AbstractComputerSetProcessorTest extends AbstractFeatureTest {
 
+	/**
+	 * Check for the correct column names from a start index. If the result
+	 * table was generate based on a labeling, the label would be stored in the
+	 * first column.
+	 * 
+     * Note: No duplicate ComputerSets.
+	 * 
+	 * @param result the result table
+	 * @param computerSets the computer sets
+	 * @param startIdx the start index
+	 */
+	protected void checkAllResultTableForOneComputerSet(final GenericTable result,
+			final List<ComputerSet<?, DoubleType>> computerSets, final int startIdx) {
+		String computerSetName = ComputerSetProcessorUtils.getUniqueNames(computerSets).get(computerSets.get(0));
 
-	protected void checkAllResultTableForOneComputerSet(
-			Table<Column<DoubleType>, DoubleType> result, List<ComputerSet<?, DoubleType>> tmp) {
-		String computerSetName = ComputerSetProcessorUtils.getUniqueNames(tmp).get(tmp.get(0));
+		String[] names = computerSets.get(0).getComputerNames();
 
-		String[] names = tmp.get(0).getComputerNames();
-
-		for (int i = 0; i < result.getColumnCount(); i++) {
-			String tmpName = computerSetName + "_" + names[i];
+		for (int i = startIdx; i < result.getColumnCount(); i++) {
+			String tmpName = computerSetName + "_" + names[i-startIdx];
 			Assert.assertTrue("Wrong column order.", tmpName.equals(result.get(i).getHeader()));
 		}
 	}
-	
 
-	protected void checkResultTableForManyComputerSets(Table<Column<DoubleType>, DoubleType> result,
-			List<ComputerSet<?, DoubleType>> tmp) {
-		Map<ComputerSet<?, DoubleType>, String> computerSetNames = ComputerSetProcessorUtils.getUniqueNames(tmp);
+	/**
+	 * Check for the correct column names from a start index. If the result
+	 * table was generate based on a labeling, the label would be stored in the
+	 * first column.
+	 * 
+	 * Note: Checks correct column names for duplicate ComputerSets.
+	 * 
+	 * @param result the result table
+	 * @param computerSets the computer sets
+	 * @param startIdx the start index
+	 */
+	protected void checkResultTableForManyComputerSets(final GenericTable result,
+			final List<ComputerSet<?, DoubleType>> computerSets, final int startIdx) {
+		Map<ComputerSet<?, DoubleType>, String> computerSetNames = ComputerSetProcessorUtils.getUniqueNames(computerSets);
 
-		int i = 0;
-		for (ComputerSet<?, DoubleType> set : tmp) {
+		int i = startIdx;
+		for (ComputerSet<?, DoubleType> set : computerSets) {
 			String computerSetName = computerSetNames.get(set);
 			String[] names = set.getComputerNames();
 			for (String s : names) {

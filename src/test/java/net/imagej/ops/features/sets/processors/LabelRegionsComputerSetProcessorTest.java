@@ -39,8 +39,7 @@ import net.imagej.ops.Ops.Geometric.Size;
 import net.imagej.ops.features.sets.ComputerSet;
 import net.imagej.ops.features.sets.Geometric2DComputerSet;
 import net.imagej.ops.features.sets.tables.DefaultComputerSetTableService;
-import net.imagej.table.Column;
-import net.imagej.table.Table;
+import net.imagej.table.GenericTable;
 import net.imglib2.roi.geometric.Polygon;
 import net.imglib2.roi.labeling.LabelRegions;
 import net.imglib2.type.numeric.real.DoubleType;
@@ -72,11 +71,11 @@ public class LabelRegionsComputerSetProcessorTest extends AbstractComputerSetPro
 				LabelRegionsComputerSetProcessor.class, LabelRegions.class, new ComputerSet[] { geom },
 				new DefaultComputerSetTableService<>());
 
-		Table<Column<DoubleType>, DoubleType> result = processor.compute1(roi);
+		GenericTable result = processor.compute1(roi);
 
-		List<ComputerSet<?, DoubleType>> tmp = new ArrayList<>();
-		tmp.add(geom);
-		checkAllResultTableForOneComputerSet(result, tmp);
+		List<ComputerSet<?, DoubleType>> computerSets = new ArrayList<>();
+		computerSets.add(geom);
+		checkAllResultTableForOneComputerSet(result, computerSets, 1);
 	}
 
 	@SuppressWarnings({ "unchecked" })
@@ -89,11 +88,11 @@ public class LabelRegionsComputerSetProcessorTest extends AbstractComputerSetPro
 				LabelRegionsComputerSetProcessor.class, LabelRegions.class, new ComputerSet[] { geom },
 				new DefaultComputerSetTableService<>());
 
-		Table<Column<DoubleType>, DoubleType> result = processor.compute1(roi);
+		GenericTable result = processor.compute1(roi);
 
-		List<ComputerSet<?, DoubleType>> tmp = new ArrayList<>();
-		tmp.add(geom);
-		checkAllResultTableForOneComputerSet(result, tmp);
+		List<ComputerSet<?, DoubleType>> computerSets = new ArrayList<>();
+		computerSets.add(geom);
+		checkAllResultTableForOneComputerSet(result, computerSets, 1);
 	}
 
 	@SuppressWarnings({ "unchecked" })
@@ -107,12 +106,12 @@ public class LabelRegionsComputerSetProcessorTest extends AbstractComputerSetPro
 				LabelRegionsComputerSetProcessor.class, LabelRegions.class, new ComputerSet[] { geom, geom1 },
 				new DefaultComputerSetTableService<>());
 
-		Table<Column<DoubleType>, DoubleType> result = processor.compute1(roi);
+		GenericTable result = processor.compute1(roi);
 
-		List<ComputerSet<?, DoubleType>> tmp = new ArrayList<>();
-		tmp.add(geom);
-		tmp.add(geom1);
-		checkResultTableForManyComputerSets(result, tmp);
+		List<ComputerSet<?, DoubleType>> computerSets = new ArrayList<>();
+		computerSets.add(geom);
+		computerSets.add(geom1);
+		checkResultTableForManyComputerSets(result, computerSets, 1);
 	}
 
 }

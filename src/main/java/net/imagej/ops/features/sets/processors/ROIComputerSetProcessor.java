@@ -29,33 +29,32 @@
  */
 package net.imagej.ops.features.sets.processors;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import net.imagej.ops.Op;
 import net.imagej.ops.features.sets.ComputerSet;
 import net.imagej.ops.features.sets.tables.ComputerSetTableService;
 import net.imagej.ops.features.sets.tables.DefaultTable;
 import net.imagej.ops.special.computer.Computers;
-import net.imagej.table.Column;
-import net.imagej.table.Table;
+import net.imagej.table.GenericTable;
 import net.imglib2.RandomAccessible;
 import net.imglib2.roi.Regions;
 import net.imglib2.roi.labeling.LabelRegion;
 import net.imglib2.roi.labeling.LabelRegions;
 import net.imglib2.type.Type;
+import net.imglib2.util.Pair;
+import net.imglib2.util.ValuePair;
 
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**
  * A ROIProcessor holds {@link ComputerSet}s and
- * {@link ROIComputerSetProcessor#compute2(RandomAccessible, LabelRegions, Table)}
+ * {@link ROIComputerSetProcessor#compute2(RandomAccessible, LabelRegions, GenericTable)}
  * computes the {@link Computers} on the sampled {@link LabelRegion} of I and returns a
  * {@link DefaultTable}.
  *
@@ -84,16 +83,21 @@ public class ROIComputerSetProcessor<T extends Type<T>, S, O extends Type<O>>
 	 */
 	private Map<ComputerSet<?, O>, String> names;
 
+	/**
+	 * Name of the column where the label is stored.
+	 */
+	private String labelColumnName;
+
 	@Override
-	public Table<Column<O>, O> createOutput(final RandomAccessible<T> input1, final LabelRegions<S> input2) {
+	public GenericTable createOutput(final RandomAccessible<T> input1, final LabelRegions<S> input2) {
 		names = ComputerSetProcessorUtils.getUniqueNames(Arrays.asList(computerSets));
-		return csts.createTable(computerSets, names, input2.getExistingLabels().size());
+		labelColumnName = ComputerSetProcessorUtils.uniqueName(names.values(), "Label");
+		GenericTable table = csts.createTable(computerSets, names, labelColumnName, input2.getExistingLabels().size());
+		return table;
 	}
 
 	@Override
 	public void compute2(final RandomAccessible<T> input1, final LabelRegions<S> input2,
-			final Table<Column<O>, O> output) {
-
 			final GenericTable output) {
 		
 		Set<Pair<Iterable<T>, S>> regions = new HashSet<>();

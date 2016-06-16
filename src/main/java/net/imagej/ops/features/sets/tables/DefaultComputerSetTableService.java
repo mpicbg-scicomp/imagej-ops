@@ -34,8 +34,8 @@ import java.util.Map;
 import net.imagej.ops.features.sets.ComputerSet;
 import net.imagej.ops.features.sets.processors.ComputerSetProcessor;
 import net.imagej.ops.features.sets.processors.ComputerSetProcessorUtils;
-import net.imagej.table.Column;
-import net.imagej.table.Table;
+import net.imagej.table.DefaultGenericTable;
+import net.imagej.table.GenericTable;
 import net.imglib2.type.Type;
 
 /**
@@ -46,25 +46,42 @@ import net.imglib2.type.Type;
  *
  * @author Tim-Oliver Buchholz, University of Konstanz
  *
- * @param <O>
- *            datatype of the table entries.
  */
 public class DefaultComputerSetTableService<O extends Type<O>> implements ComputerSetTableService<O> {
 
-	private final Table<Column<O>, O> table;
+	private final GenericTable table;
 
 	public DefaultComputerSetTableService() {
-		table = new DefaultTable<>();
+		table = new DefaultGenericTable();
 	}
 
 	@Override
-	public Table<Column<O>, O> createTable(final ComputerSet<?, O>[] computerSets,
+	public GenericTable createTable(final ComputerSet<?, O>[] computerSets,
 			final Map<ComputerSet<?, O>, String> names, final int numRows) {
 		for (final ComputerSet<?, O> computerSet : computerSets) {
 			final String computerSetName = names.get(computerSet);
 
 			for (final String computerName : computerSet.getComputerNames()) {
-				table.appendColumn(ComputerSetProcessorUtils.getFeatureTableName(computerSetName, computerName));
+				table.appendColumn(ComputerSetProcessorUtils.getComputerTableName(computerSetName, computerName));
+
+			}
+		}
+
+		for (int i = 0; i < numRows; i++) {
+			table.appendRow();
+		}
+		return table;
+	}
+	
+	@Override
+	public GenericTable createTable(ComputerSet<?, O>[] computerSets, Map<ComputerSet<?, O>, String> names,
+			String labelColumnName, int numRows) {
+		table.appendColumn(labelColumnName);
+		for (final ComputerSet<?, O> computerSet : computerSets) {
+			final String computerSetName = names.get(computerSet);
+
+			for (final String computerName : computerSet.getComputerNames()) {
+				table.appendColumn(ComputerSetProcessorUtils.getComputerTableName(computerSetName, computerName));
 
 			}
 		}

@@ -34,8 +34,7 @@ import java.util.Map;
 import net.imagej.ops.features.sets.ComputerSet;
 import net.imagej.ops.features.sets.processors.ComputerSetProcessor;
 import net.imagej.ops.special.computer.Computers;
-import net.imagej.table.Column;
-import net.imagej.table.Table;
+import net.imagej.table.GenericTable;
 import net.imglib2.type.Type;
 
 /**
@@ -49,7 +48,7 @@ import net.imglib2.type.Type;
 public interface ComputerSetTableService<O extends Type<O>> {
 
 	/**
-	 * Create a new {@link Table} to store the results of a
+	 * Create a new {@link GenericTable} to store the results of a
 	 * {@link ComputerSetProcessor}.
 	 *
 	 * @param computerSets
@@ -58,8 +57,28 @@ public interface ComputerSetTableService<O extends Type<O>> {
 	 *            a map which maps a unique name to each {@link ComputerSet}
 	 * @param numRows
 	 *            number of rows
-	 * @return a table with a column for each {@link Computers} and numRows rows.
+	 * @return a table with a column for each {@link Computers} and numRows
+	 *         rows.
 	 */
-	public Table<Column<O>, O> createTable(final ComputerSet<?, O>[] computerSets,
-			final Map<ComputerSet<?, O>, String> names, final int numRows);
+	public GenericTable createTable(final ComputerSet<?, O>[] computerSets, final Map<ComputerSet<?, O>, String> names,
+			final int numRows);
+
+	/**
+	 * Create a new {@link GenericTable} to store the results of a
+	 * {@link ComputerSetProcessor} and the label name. The name of the label is
+	 * stored in the first column.
+	 *
+	 * @param computerSets
+	 *            of the {@link ComputerSetProcessor}
+	 * @param names
+	 *            a map which maps a unique name to each {@link ComputerSet}
+	 * @param labelColumnName
+	 *            the name of the label column. The column name has to be unique.
+	 * @param numRows
+	 *            number of rows
+	 * @return a table with a column for each {@link Computers} and numRows
+	 *         rows.
+	 */
+	public GenericTable createTable(final ComputerSet<?, O>[] computerSets, final Map<ComputerSet<?, O>, String> names,
+			final String labelColumnName, final int numRows);
 }

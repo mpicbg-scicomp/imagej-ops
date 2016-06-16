@@ -29,21 +29,15 @@
  */
 package net.imagej.ops.features.sets.processors;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import net.imagej.ops.Op;
 import net.imagej.ops.features.sets.ComputerSet;
 import net.imagej.ops.features.sets.tables.ComputerSetTableService;
 import net.imagej.ops.features.sets.tables.DefaultTable;
 import net.imagej.ops.special.computer.Computers;
-import net.imagej.table.Column;
-import net.imagej.table.Table;
+import net.imagej.table.GenericTable;
 import net.imglib2.type.Type;
 
 import org.scijava.plugin.Parameter;
@@ -51,12 +45,12 @@ import org.scijava.plugin.Plugin;
 
 /**
  * An IterableProcessor holds {@link ComputerSet}s and
- * {@link IterableComputerSetProcessor#compute1(Iterable, Table)}
- * computes the {@link Computers} on the given {@link Iterable} and returns a
+ * {@link IterableComputerSetProcessor#compute1(Iterable, GenericTable)} computes the
+ * {@link Computers} on the given {@link Iterable} and returns a
  * {@link DefaultTable}.
  *
- * The {@link DefaultTable} has one row and as many columns as {@link Computers} were
- * calculated.
+ * The {@link DefaultTable} has one row and as many columns as {@link Computers}
+ * were calculated.
  *
  * @author Tim-Oliver Buchholz, University of Konstanz
  *
@@ -84,13 +78,13 @@ public class IterableComputerSetProcessor<I, O extends Type<O>>
 	}
 
 	@Override
-	public Table<Column<O>, O> createOutput(final Iterable<I> input1) {
+	public GenericTable createOutput(final Iterable<I> input1) {
 		names = ComputerSetProcessorUtils.getUniqueNames(Arrays.asList(computerSets));
 		return csts.createTable(computerSets, names, 1);
 	}
 
 	@Override
-	public void compute1(final Iterable<I> input1, final Table<Column<O>, O> output) {
+	public void compute1(final Iterable<I> input1, final GenericTable output) {
 
 		Arrays.asList(computerSets).parallelStream().forEach(c -> {
 			final Map<String, O> result = c.compute1(input1);

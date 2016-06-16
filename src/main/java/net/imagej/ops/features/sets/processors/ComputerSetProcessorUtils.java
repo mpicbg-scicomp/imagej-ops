@@ -66,7 +66,7 @@ public class ComputerSetProcessorUtils {
 	 *            the new suggested name
 	 * @return the unique name
 	 */
-	private static String uniqueName(final Collection<String> names, final String n) {
+	protected static String uniqueName(final Collection<String> names, final String n) {
 
 		if (!names.contains(n)) {
 			return n;
@@ -90,7 +90,7 @@ public class ComputerSetProcessorUtils {
 	 *            the name of the {@link Computers}
 	 * @return the concatenated string
 	 */
-	public static String getFeatureTableName(final String computerSetName, final String computerName) {
+	public static String getComputerTableName(final String computerSetName, final String computerName) {
 		return computerSetName + "_" + computerName;
 	}
 
@@ -103,7 +103,7 @@ public class ComputerSetProcessorUtils {
 	 *            for which unique names are required
 	 * @return map from computerSets to unique names
 	 */
-	public static <O> Map<ComputerSet<?, O>, String> getUniqueNames(final List<ComputerSet<?, O>> computerSets) {
+	protected static <O> Map<ComputerSet<?, O>, String> getUniqueNames(final List<ComputerSet<?, O>> computerSets) {
 
 		final Map<ComputerSet<?, O>, String> names = new HashMap<>();
 

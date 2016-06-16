@@ -33,8 +33,7 @@ import java.util.concurrent.ExecutorService;
 
 import net.imagej.ops.features.sets.ComputerSet;
 import net.imagej.ops.special.hybrid.AbstractBinaryHybridCF;
-import net.imagej.table.Column;
-import net.imagej.table.Table;
+import net.imagej.table.GenericTable;
 import net.imglib2.type.Type;
 
 import org.scijava.convert.ConvertService;
@@ -54,7 +53,7 @@ import org.scijava.thread.ThreadService;
  *            Outputtype of the {@link ComputerSet}.
  */
 public abstract class AbstractBinaryComputerSetProcessor<I, J, F, O extends Type<O>>
-		extends AbstractBinaryHybridCF<I, J, Table<Column<O>, O>> implements ComputerSetProcessor<I, O> {
+		extends AbstractBinaryHybridCF<I, J, GenericTable> implements ComputerSetProcessor<I> {
 
 	@Parameter
 	protected ComputerSet<F, O>[] computerSets;

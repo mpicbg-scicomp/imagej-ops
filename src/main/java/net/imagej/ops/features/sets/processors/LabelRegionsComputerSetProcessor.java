@@ -29,21 +29,17 @@
  */
 package net.imagej.ops.features.sets.processors;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.StreamSupport;
 
 import net.imagej.ops.Op;
 import net.imagej.ops.features.sets.ComputerSet;
 import net.imagej.ops.features.sets.tables.ComputerSetTableService;
 import net.imagej.ops.features.sets.tables.DefaultTable;
 import net.imagej.ops.special.computer.Computers;
-import net.imagej.table.Column;
-import net.imagej.table.Table;
+import net.imagej.table.GenericTable;
 import net.imglib2.roi.labeling.LabelRegion;
 import net.imglib2.roi.labeling.LabelRegions;
 import net.imglib2.type.Type;
@@ -53,7 +49,7 @@ import org.scijava.plugin.Plugin;
 
 /**
  * A LabelRegionsProcessor holds {@link ComputerSet}s and
- * {@link LabelRegionsComputerSetProcessor#compute1(LabelRegions, Table)}
+ * {@link LabelRegionsComputerSetProcessor#compute1(LabelRegions, GenericTable)}
  * computes the {@link Computers} on the given {@link LabelRegions} and returns a
  * {@link DefaultTable}.
  *
@@ -81,11 +77,18 @@ public class LabelRegionsComputerSetProcessor<S, F, O extends Type<O>>
 	 * column names in the {@link DefaultTable}.
 	 */
 	private Map<ComputerSet<?, O>, String> names;
+	
+	/**
+	 * Name of the column where the label is stored.
+	 */
+	private String labelColumnName;
 
 	@Override
-	public Table<Column<O>, O> createOutput(final LabelRegions<S> input1) {
+	public GenericTable createOutput(final LabelRegions<S> input1) {
 		names = ComputerSetProcessorUtils.getUniqueNames(Arrays.asList(computerSets));
-		return csts.createTable(computerSets, names, input1.getExistingLabels().size());
+		labelColumnName = ComputerSetProcessorUtils.uniqueName(names.values(), "Label");
+		GenericTable table = csts.createTable(computerSets, names, labelColumnName, input1.getExistingLabels().size());
+		return table;
 	}
 
 	@Override

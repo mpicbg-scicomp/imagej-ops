@@ -89,39 +89,22 @@ public class LabelRegionsComputerSetProcessor<S, F, O extends Type<O>>
 	}
 
 	@Override
-	public void compute1(final LabelRegions<S> input1, final Table<Column<O>, O> output) {
-
-		final List<Future<Void>> futures = new ArrayList<>();
-
-		int i = 0;
-
-		for (final LabelRegion<S> r : input1) {
-			final int j = i;
-			futures.add(es.submit(new Callable<Void>() {
-				@Override
-				public Void call() throws Exception {
-					for (final ComputerSet<F, O> computerSet : computerSets) {
-						// LabelRegion has to be converted to Polygon or Mesh.
-						final Map<String, O> result = computerSet.compute1(cs.convert(r, computerSet.getInType()));
-						for (final String name : result.keySet()) {
-							output.set(ComputerSetProcessorUtils.getFeatureTableName(names.get(computerSet), name), j,
-									result.get(name));
-						}
-					}
-					return null;
+	public void compute1(final LabelRegions<S> input1, final GenericTable output) {
+		
+		AtomicInteger rowIdx = new AtomicInteger(0);
+		
+		StreamSupport.stream(input1.spliterator(), true).parallel().forEach(r -> {
+			final int j = rowIdx.getAndIncrement();
+			for (final ComputerSet<F, O> computerSet : computerSets) {
+				// LabelRegion has to be converted to Polygon or Mesh.
+				final Map<String, O> result = computerSet.compute1(cs.convert(r, computerSet.getInType()));
+				for (final String name : result.keySet()) {
+					output.set(ComputerSetProcessorUtils.getComputerTableName(names.get(computerSet), name), j,
+							result.get(name));
 				}
-			}));
-
-			++i;
-		}
-
-		for (final Future<Void> future : futures) {
-			try {
-				future.get();
-			} catch (InterruptedException | ExecutionException exc) {
-				throw new RuntimeException(exc);
 			}
-		}
+			output.set(labelColumnName, j, r.getLabel());
+		});
 
 	}
 

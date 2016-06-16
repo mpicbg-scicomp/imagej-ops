@@ -92,30 +92,13 @@ public class IterableComputerSetProcessor<I, O extends Type<O>>
 	@Override
 	public void compute1(final Iterable<I> input1, final Table<Column<O>, O> output) {
 
-		final List<Future<Void>> futures = new ArrayList<>();
-
-		for (final ComputerSet<Iterable<I>, O> computerSet : computerSets) {
-
-			futures.add(es.submit(new Callable<Void>() {
-				@Override
-				public Void call() throws Exception {
-					final Map<String, O> result = computerSet.compute1(input1);
-					for (final String name : result.keySet()) {
-						output.set(ComputerSetProcessorUtils.getFeatureTableName(names.get(computerSet), name), 0,
-								result.get(name));
-					}
-					return null;
-				}
-			}));
-		}
-
-		for (final Future<Void> future : futures) {
-			try {
-				future.get();
-			} catch (InterruptedException | ExecutionException exc) {
-				throw new RuntimeException(exc);
+		Arrays.asList(computerSets).parallelStream().forEach(c -> {
+			final Map<String, O> result = c.compute1(input1);
+			for (final String name : result.keySet()) {
+				output.set(ComputerSetProcessorUtils.getComputerTableName(names.get(c), name), 0, result.get(name));
 			}
-		}
+		});
+		
 	}
 
 }

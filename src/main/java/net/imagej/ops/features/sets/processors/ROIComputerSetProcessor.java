@@ -94,37 +94,26 @@ public class ROIComputerSetProcessor<T extends Type<T>, S, O extends Type<O>>
 	public void compute2(final RandomAccessible<T> input1, final LabelRegions<S> input2,
 			final Table<Column<O>, O> output) {
 
-		final List<Future<Void>> futures = new ArrayList<>();
+			final GenericTable output) {
+		
+		Set<Pair<Iterable<T>, S>> regions = new HashSet<>();
+		input2.forEach(r -> {
+			regions.add(new ValuePair<Iterable<T>, S>(Regions.sample(r, input1), r.getLabel()));
+		});
 
-		int i = 0;
-
-		for (final LabelRegion<S> r : input2) {
-			final int j = i;
-			final Iterable<T> roi = Regions.sample(r, input1);
-			futures.add(es.submit(new Callable<Void>() {
-				@Override
-				public Void call() throws Exception {
-					for (final ComputerSet<Iterable<T>, O> computerSet : computerSets) {
-						final Map<String, O> result = computerSet.compute1(roi);
-						for (final String name : result.keySet()) {
-							output.set(ComputerSetProcessorUtils.getFeatureTableName(names.get(computerSet), name), j,
-									result.get(name));
-						}
-					}
-					return null;
+		AtomicInteger rowIdx = new AtomicInteger(0);
+		
+		regions.parallelStream().forEach(p -> {
+			final int j = rowIdx.getAndIncrement();
+			for (final ComputerSet<Iterable<T>, O> computerSet : computerSets) {
+				final Map<String, O> result = computerSet.compute1(p.getA());
+				for (final String name : result.keySet()) {
+					output.set(ComputerSetProcessorUtils.getComputerTableName(names.get(computerSet), name), j,
+							result.get(name));
 				}
-			}));
-
-			++i;
-		}
-
-		for (final Future<Void> future : futures) {
-			try {
-				future.get();
-			} catch (InterruptedException | ExecutionException exc) {
-				throw new RuntimeException(exc);
 			}
-		}
+			output.set(labelColumnName, j, p.getB());
+		});
 
 	}
 

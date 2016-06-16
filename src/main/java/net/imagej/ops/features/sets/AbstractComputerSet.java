@@ -30,7 +30,6 @@
 
 package net.imagej.ops.features.sets;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -170,9 +169,8 @@ public abstract class AbstractComputerSet<I, O extends Type<O>> extends Abstract
 	 */
 	@Override
 	public Map<String, O> compute1(final I input) {
-		for (final UnaryComputerOp<I, O> computer : computers.values()) {
-			computer.compute1(input, computer.out());
-		}
+		
+		computers.values().parallelStream().forEach(c -> c.compute1(input, c.out()));
 
 		return namedOutputs;
 	}

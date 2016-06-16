@@ -43,7 +43,6 @@ import net.imagej.ops.Op;
 import net.imagej.ops.OpEnvironment;
 import net.imagej.ops.OpInfo;
 import net.imagej.ops.special.computer.Computers;
-import net.imagej.ops.special.computer.UnaryComputerOp;
 import net.imglib2.type.Type;
 
 import org.scijava.plugin.Parameter;
@@ -145,11 +144,10 @@ public abstract class AbstractConfigurableComputerSet<I, O extends Type<O>> exte
 	 */
 	@Override
 	public Map<String, O> compute1(final I input) {
-		for (final UnaryComputerOp<I, O> computer : activated.entrySet().parallelStream().filter(a -> a.getValue())
-				.map(a -> computers.get(a.getKey())).collect(Collectors.toList())) {
-			computer.compute1(input, computer.out());
-		}
-
+		
+		activated.entrySet().parallelStream().filter(a -> a.getValue())
+		.map(a -> computers.get(a.getKey())).forEach(c -> c.compute1(input, c.out()));
+		
 		return namedOutputs;
 	}
 

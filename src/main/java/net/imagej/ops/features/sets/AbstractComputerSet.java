@@ -117,6 +117,7 @@ public abstract class AbstractComputerSet<I, O extends Type<O>> extends Abstract
 
 	/**
 	 * TEMP
+	 * TODO: https://github.com/imagej/imagej-ops/issues/351
 	 *
 	 * A fake input is need for the matching of Ops. This can be removed if the
 	 * matcher gets improved.

@@ -30,6 +30,8 @@
 
 package net.imagej.ops.special;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,6 +41,7 @@ import net.imagej.ops.Op;
 import net.imagej.ops.OpCandidate;
 import net.imagej.ops.OpEnvironment;
 import net.imagej.ops.OpRef;
+import net.imagej.ops.OpUtils;
 import net.imagej.ops.Threadable;
 import net.imagej.ops.special.computer.BinaryComputerOp;
 import net.imagej.ops.special.computer.NullaryComputerOp;
@@ -59,6 +62,9 @@ import net.imagej.ops.special.inplace.BinaryInplaceOp;
 import net.imagej.ops.special.inplace.UnaryInplaceOp;
 
 import org.scijava.InstantiableException;
+import org.scijava.type.Nil;
+import org.scijava.type.Types;
+import org.scijava.util.GenericUtils;
 
 /**
  * A <em>special</em> operation is one intended to be used repeatedly from other
@@ -261,6 +267,12 @@ public interface SpecialOp extends Op, Initializable, Threadable {
 	 */
 	int getArity();
 
+	default void fill(final String fieldName, final Class<? extends Op> opType,
+		final Object... args)
+	{
+		fill(ops(), this, fieldName, opType, args);
+	}
+
 	// -- Threadable methods --
 
 	@Override
@@ -272,6 +284,102 @@ public interface SpecialOp extends Op, Initializable, Threadable {
 	}
 
 	// -- Utility methods --
+
+	static void fill(final OpEnvironment ops, final Object op,
+		final String fieldName, final Class<? extends Op> opType,
+		final Object... args)
+	{
+		final Class<?> c = op.getClass();
+		final Field field = Types.field(c, fieldName);
+
+		// extract its type
+		final Type fieldType = GenericUtils.getFieldType(field, c);
+
+		// wrap it in a Nil
+		if (!Types.isAssignable(fieldType, SpecialOp.class)) {
+			throw new IllegalArgumentException("Field does not extend SpecialOp: " +
+				Types.name(fieldType));
+		}
+		@SuppressWarnings("unchecked")
+		final Nil<? extends SpecialOp> nil = //
+			(Nil<? extends SpecialOp>) Nil.of(fieldType);
+
+		// look up the requested op
+		final Object specialOp = SpecialOp.op(ops, opType, nil, args);
+
+		// inject result into the field
+		field.setAccessible(true);
+		try {
+			field.set(op, specialOp);
+		}
+		catch (final IllegalAccessException exc) {
+			throw new IllegalArgumentException("Cannot write field: " + fieldName,
+				exc);
+		}
+	}
+
+	/**
+	 * Gets the best {@link SpecialOp} implementation for the given types and
+	 * arguments, populating its inputs.
+	 *
+	 * @param ops The {@link OpEnvironment} to search for a matching op.
+	 * @param opType The {@link Class} of the operation. If multiple
+	 *          {@link SpecialOp}s share this type (e.g., the type is an interface
+	 *          which multiple {@link SpecialOp}s implement), then the best
+	 *          {@link SpecialOp} implementation to use will be selected
+	 *          automatically from the type and arguments.
+	 * @param specialType The {@link SpecialOp} type to which matches should be
+	 *          restricted.
+	 * @param args The operation's arguments, <em>including</em> typed inputs
+	 *          and/or outputs.
+	 * @return A typed {@link SpecialOp} with populated inputs, ready to use.
+	 */
+	static <OP extends SpecialOp> OP op(final OpEnvironment ops,
+		final Class<? extends Op> opType, final Nil<OP> specialType,
+		final Object... args)
+	{
+		final Type outType = outType(specialType);
+		final OpRef ref = OpRef.createTypes(opType, specialType.getType(), outType,
+			args);
+		final Op result = ops.op(ref);
+		final java.lang.reflect.Type resultType = ops.types().typeOf(result);
+
+		assert Types.isAssignable(resultType, specialType.getType());
+
+		// NB: Barring any bugs in the runtime type logic, this cast is safe.
+		@SuppressWarnings("unchecked")
+		final OP op = (OP) result;
+		return op;
+	}
+
+	static Type outType(final Nil<?> nil) {
+		return typeParam(nil.getType(), Output.class, 0);
+	}
+
+	/**
+	 * Wrapper for {@link GenericUtils#getTypeParameter} which returns null if the
+	 * requested class is not a supertype.
+	 */
+	static Type typeParam(final Type type, final Class<?> c,
+		final int n)
+	{
+		if (!Types.isAssignable(type, c)) return null;
+		return GenericUtils.getTypeParameter(type, c, n);
+	}
+
+	static Object[] args(final Nil<?> specialType,
+		final Object[] otherArgs, final Object out, Object... inArgs)
+	{
+		final Object[] args = OpUtils.args(otherArgs, inArgs);
+		if (!includeOutput(specialType)) return args;
+		// the output is also an input; prepend output value
+		final Object outArg = out == null ? Nil.of(outType(specialType)) : out;
+		return OpUtils.args(args, outArg);
+	}
+
+	static boolean includeOutput(final Nil<?> specialType) {
+		return Types.isAssignable(specialType.getType(), OutputMutable.class);
+	}
 
 	/**
 	 * Gets the best {@link SpecialOp} implementation for the given types and

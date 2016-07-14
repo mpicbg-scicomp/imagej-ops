@@ -68,6 +68,7 @@ public interface UnaryOp<I, O> extends NullaryOp<O>, UnaryInput<I> {
 	 * <p>
 	 * The exact behavior depends on the type of special op.
 	 * </p>
+	 * 
 	 * @param input argument to the operation
 	 * @param output reference where the operation's result will be stored
 	 * @return result of the operation
@@ -105,8 +106,8 @@ public interface UnaryOp<I, O> extends NullaryOp<O>, UnaryInput<I> {
 	// -- Utility methods --
 
 	/**
-	 * Gets the best {@link UnaryOp} implementation for the given types
-	 * and arguments, populating its inputs.
+	 * Gets the best {@link UnaryOp} implementation for the given types and
+	 * arguments, populating its inputs.
 	 *
 	 * @param ops The {@link OpEnvironment} to search for a matching op.
 	 * @param opType The {@link Class} of the operation. If multiple
@@ -118,55 +119,54 @@ public interface UnaryOp<I, O> extends NullaryOp<O>, UnaryInput<I> {
 	 *          input and output values.
 	 * @return A {@link UnaryOp} with populated inputs, ready to use.
 	 */
-	static <I, O, OP extends UnaryOp<I, O>> OP op(
-		final OpEnvironment ops, final Class<? extends Op> opType,
-		final Nil<OP> specialType, final Object... otherArgs)
+	static <I, O, OP extends UnaryOp<I, O>> OP op(final OpEnvironment ops,
+		final Class<? extends Op> opType, final Nil<OP> specialType,
+		final Object... otherArgs)
 	{
 		return opOI(ops, opType, specialType, null, null, otherArgs);
 	}
 
 	/**
-	 * Gets the best {@link UnaryOp} implementation for the given types
-	 * and arguments, populating its inputs.
+	 * Gets the best {@link UnaryOp} implementation for the given types and
+	 * arguments, populating its inputs.
 	 *
 	 * @param ops The {@link OpEnvironment} to search for a matching op.
 	 * @param opType The {@link Class} of the operation. If multiple
-	 *          {@link UnaryOp}s share this type (e.g., the type is an
-	 *          interface which multiple {@link UnaryOp}s implement), then
-	 *          the best {@link UnaryOp} implementation to use will be
-	 *          selected automatically from the type and arguments.
+	 *          {@link UnaryOp}s share this type (e.g., the type is an interface
+	 *          which multiple {@link UnaryOp}s implement), then the best
+	 *          {@link UnaryOp} implementation to use will be selected
+	 *          automatically from the type and arguments.
 	 * @param in The typed input.
 	 * @param otherArgs The operation's arguments, <em>excluding</em> the typed
 	 *          input and output values.
 	 * @return A {@link UnaryOp} with populated inputs, ready to use.
 	 */
-	static <I, O, OP extends UnaryOp<I, O>> OP opI(
-		final OpEnvironment ops, final Class<? extends Op> opType,
-		final Nil<OP> specialType, final I in, final Object... otherArgs)
+	static <I, O, OP extends UnaryOp<I, O>> OP opI(final OpEnvironment ops,
+		final Class<? extends Op> opType, final Nil<OP> specialType, final I in,
+		final Object... otherArgs)
 	{
 		return opOI(ops, opType, specialType, null, in, otherArgs);
 	}
 
 	/**
-	 * Gets the best {@link UnaryOp} implementation for the given types
-	 * and arguments, populating its inputs.
+	 * Gets the best {@link UnaryOp} implementation for the given types and
+	 * arguments, populating its inputs.
 	 *
 	 * @param ops The {@link OpEnvironment} to search for a matching op.
 	 * @param opType The {@link Class} of the operation. If multiple
-	 *          {@link UnaryOp}s share this type (e.g., the type is an
-	 *          interface which multiple {@link UnaryOp}s implement), then
-	 *          the best {@link UnaryOp} implementation to use will be
-	 *          selected automatically from the type and arguments.
+	 *          {@link UnaryOp}s share this type (e.g., the type is an interface
+	 *          which multiple {@link UnaryOp}s implement), then the best
+	 *          {@link UnaryOp} implementation to use will be selected
+	 *          automatically from the type and arguments.
 	 * @param out The typed output.
 	 * @param in The typed input.
 	 * @param otherArgs The operation's arguments, <em>excluding</em> the typed
 	 *          input and output values.
 	 * @return A {@link UnaryOp} with populated inputs, ready to use.
 	 */
-	static <I, O, OP extends UnaryOp<I, O>> OP opOI(
-		final OpEnvironment ops, final Class<? extends Op> opType,
-		final Nil<OP> specialType, final O out, final I in,
-		final Object... otherArgs)
+	static <I, O, OP extends UnaryOp<I, O>> OP opOI(final OpEnvironment ops,
+		final Class<? extends Op> opType, final Nil<OP> specialType, final O out,
+		final I in, final Object... otherArgs)
 	{
 		final Object inArg = in == null ? Nil.of(inType(specialType)) : in;
 		final Object[] args = SpecialOp.args(specialType, otherArgs, out, inArg);

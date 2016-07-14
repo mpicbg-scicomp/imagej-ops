@@ -66,9 +66,9 @@ public final class Specials {
 	 * @return A {@link SpecialOp} with populated inputs, ready to use.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static <OP extends SpecialOp> OP op(
-		final OpEnvironment ops, final Class<? extends Op> opType,
-		final Nil<OP> specialType, final Object... otherArgs)
+	public static <OP extends SpecialOp> OP op(final OpEnvironment ops,
+		final Class<? extends Op> opType, final Nil<OP> specialType,
+		final Object... otherArgs)
 	{
 		final Type t = specialType.getType();
 		if (Types.isAssignable(t, NullaryOp.class)) {

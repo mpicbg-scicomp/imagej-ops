@@ -74,6 +74,7 @@ public interface BinaryOp<I1, I2, O> extends UnaryOp<I1, O>,
 	 * <p>
 	 * The exact behavior depends on the type of special op.
 	 * </p>
+	 * 
 	 * @param input1 first argument to the operation
 	 * @param input2 second argument to the operation
 	 * @param output reference where the operation's result will be stored
@@ -112,8 +113,8 @@ public interface BinaryOp<I1, I2, O> extends UnaryOp<I1, O>,
 	// -- Utility methods --
 
 	/**
-	 * Gets the best {@link BinaryOp} implementation for the given types
-	 * and arguments, populating its inputs.
+	 * Gets the best {@link BinaryOp} implementation for the given types and
+	 * arguments, populating its inputs.
 	 *
 	 * @param ops The {@link OpEnvironment} to search for a matching op.
 	 * @param opType The {@link Class} of the operation. If multiple
@@ -133,15 +134,15 @@ public interface BinaryOp<I1, I2, O> extends UnaryOp<I1, O>,
 	}
 
 	/**
-	 * Gets the best {@link BinaryOp} implementation for the given types
-	 * and arguments, populating its inputs.
+	 * Gets the best {@link BinaryOp} implementation for the given types and
+	 * arguments, populating its inputs.
 	 *
 	 * @param ops The {@link OpEnvironment} to search for a matching op.
 	 * @param opType The {@link Class} of the operation. If multiple
-	 *          {@link BinaryOp}s share this type (e.g., the type is an
-	 *          interface which multiple {@link BinaryOp}s implement),
-	 *          then the best {@link BinaryOp} implementation to use will
-	 *          be selected automatically from the type and arguments.
+	 *          {@link BinaryOp}s share this type (e.g., the type is an interface
+	 *          which multiple {@link BinaryOp}s implement), then the best
+	 *          {@link BinaryOp} implementation to use will be selected
+	 *          automatically from the type and arguments.
 	 * @param in1 The first typed input.
 	 * @param in2 The second typed input.
 	 * @param otherArgs The operation's arguments, <em>excluding</em> the typed
@@ -157,15 +158,15 @@ public interface BinaryOp<I1, I2, O> extends UnaryOp<I1, O>,
 	}
 
 	/**
-	 * Gets the best {@link BinaryOp} implementation for the given types
-	 * and arguments, populating its inputs.
+	 * Gets the best {@link BinaryOp} implementation for the given types and
+	 * arguments, populating its inputs.
 	 *
 	 * @param ops The {@link OpEnvironment} to search for a matching op.
 	 * @param opType The {@link Class} of the operation. If multiple
-	 *          {@link BinaryOp}s share this type (e.g., the type is an
-	 *          interface which multiple {@link BinaryOp}s implement),
-	 *          then the best {@link BinaryOp} implementation to use will
-	 *          be selected automatically from the type and arguments.
+	 *          {@link BinaryOp}s share this type (e.g., the type is an interface
+	 *          which multiple {@link BinaryOp}s implement), then the best
+	 *          {@link BinaryOp} implementation to use will be selected
+	 *          automatically from the type and arguments.
 	 * @param out The typed output.
 	 * @param in1 The first typed input.
 	 * @param in2 The second typed input.

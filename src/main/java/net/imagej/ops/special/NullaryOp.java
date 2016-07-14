@@ -57,6 +57,7 @@ public interface NullaryOp<O> extends SpecialOp, Output<O> {
 	 * <p>
 	 * The exact behavior depends on the type of special op.
 	 * </p>
+	 * 
 	 * @param output reference where the operation's result will be stored
 	 * @return result of the operation
 	 * @see NullaryComputerOp#run(Object)
@@ -92,8 +93,8 @@ public interface NullaryOp<O> extends SpecialOp, Output<O> {
 	// -- Utility methods --
 
 	/**
-	 * Gets the best {@link UnaryOp} implementation for the given types
-	 * and arguments, populating its inputs.
+	 * Gets the best {@link UnaryOp} implementation for the given types and
+	 * arguments, populating its inputs.
 	 *
 	 * @param ops The {@link OpEnvironment} to search for a matching op.
 	 * @param opType The {@link Class} of the operation. If multiple
@@ -105,23 +106,23 @@ public interface NullaryOp<O> extends SpecialOp, Output<O> {
 	 *          output value.
 	 * @return A {@link NullaryOp} with populated inputs, ready to use.
 	 */
-	static <O, OP extends NullaryOp<O>> OP op(
-		final OpEnvironment ops, final Class<? extends Op> opType,
-		final Nil<OP> specialType, final Object... otherArgs)
+	static <O, OP extends NullaryOp<O>> OP op(final OpEnvironment ops,
+		final Class<? extends Op> opType, final Nil<OP> specialType,
+		final Object... otherArgs)
 	{
 		return opO(ops, opType, specialType, null, otherArgs);
 	}
 
 	/**
-	 * Gets the best {@link NullaryOp} implementation for the given types
-	 * and arguments, populating its inputs.
+	 * Gets the best {@link NullaryOp} implementation for the given types and
+	 * arguments, populating its inputs.
 	 *
 	 * @param ops The {@link OpEnvironment} to search for a matching op.
 	 * @param opType The {@link Class} of the operation. If multiple
-	 *          {@link NullaryOp}s share this type (e.g., the type is an
-	 *          interface which multiple {@link NullaryOp}s implement),
-	 *          then the best {@link NullaryOp} implementation to use will
-	 *          be selected automatically from the type and arguments.
+	 *          {@link NullaryOp}s share this type (e.g., the type is an interface
+	 *          which multiple {@link NullaryOp}s implement), then the best
+	 *          {@link NullaryOp} implementation to use will be selected
+	 *          automatically from the type and arguments.
 	 * @param out The typed output.
 	 * @param otherArgs The operation's arguments, <em>excluding</em> the typed
 	 *          output value.

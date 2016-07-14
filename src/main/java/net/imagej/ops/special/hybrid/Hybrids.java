@@ -46,6 +46,7 @@ import net.imagej.ops.special.SpecialOp;
  * @see BinaryHybridCFI
  * @see BinaryHybridCFI1
  */
+@Deprecated
 public final class Hybrids {
 
 	private Hybrids() {

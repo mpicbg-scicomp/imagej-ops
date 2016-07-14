@@ -43,6 +43,7 @@ import net.imagej.ops.special.SpecialOp;
  * @see UnaryFunctionOp
  * @see BinaryFunctionOp
  */
+@Deprecated
 public final class Functions {
 
 	private Functions() {

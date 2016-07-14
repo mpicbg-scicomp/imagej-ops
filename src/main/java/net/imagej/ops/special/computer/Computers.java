@@ -43,6 +43,7 @@ import net.imagej.ops.special.SpecialOp;
  * @see UnaryComputerOp
  * @see BinaryComputerOp
  */
+@Deprecated
 public final class Computers {
 
 	private Computers() {

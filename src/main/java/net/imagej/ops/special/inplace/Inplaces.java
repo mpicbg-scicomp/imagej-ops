@@ -46,6 +46,7 @@ import net.imagej.ops.special.hybrid.UnaryHybridCI;
  * @author Curtis Rueden
  * @see UnaryInplaceOp
  */
+@Deprecated
 public final class Inplaces {
 
 	private Inplaces() {

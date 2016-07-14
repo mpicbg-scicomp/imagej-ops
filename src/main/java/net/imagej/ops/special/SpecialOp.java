@@ -381,20 +381,6 @@ public interface SpecialOp extends Op, Initializable, Threadable {
 		return Types.isAssignable(specialType.getType(), OutputMutable.class);
 	}
 
-	/**
-	 * @deprecated Use {@link #op(OpEnvironment, Class, Nil, Object...)} instead.
-	 */
-	@Deprecated
-	static <S extends SpecialOp, O> S op(final OpEnvironment ops,
-		final Class<? extends Op> opType, final Class<S> specialType,
-		final Class<O> outType, final Object... args)
-	{
-		final OpRef ref = OpRef.createTypes(opType, specialType, outType, args);
-		@SuppressWarnings("unchecked")
-		final S op = (S) ops.op(ref);
-		return op;
-	}
-
 	static List<OpCandidate> candidates(final OpEnvironment ops,
 		final String name, final Class<? extends Op> opType, final int arity,
 		final Flavor flavor)
@@ -436,6 +422,22 @@ public interface SpecialOp extends Op, Initializable, Threadable {
 	/** An enumeration of the primary kinds of special ops. */
 	enum Flavor {
 			COMPUTER, FUNCTION, INPLACE
+	}
+
+	// -- Deprecated --
+
+	/**
+	 * @deprecated Use {@link #op(OpEnvironment, Class, Nil, Object...)} instead.
+	 */
+	@Deprecated
+	static <S extends SpecialOp, O> S op(final OpEnvironment ops,
+		final Class<? extends Op> opType, final Class<S> specialType,
+		final Class<O> outType, final Object... args)
+	{
+		final OpRef ref = OpRef.createTypes(opType, specialType, outType, args);
+		@SuppressWarnings("unchecked")
+		final S op = (S) ops.op(ref);
+		return op;
 	}
 
 }

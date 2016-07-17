@@ -36,7 +36,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Random;
 
 import net.imagej.ops.AbstractOpTest;
-import net.imagej.ops.special.hybrid.Hybrids;
+import net.imagej.ops.special.UnaryOp;
 import net.imagej.ops.special.hybrid.UnaryHybridCF;
 import net.imglib2.Cursor;
 import net.imglib2.FinalDimensions;
@@ -52,6 +52,7 @@ import net.imglib2.view.Views;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.scijava.type.Nil;
 
 /**
  * Test {@link CopyRAI}.
@@ -147,13 +148,16 @@ public class CopyRAITest extends AbstractOpTest {
 	}
 
 	@Test
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void copyRAIDifferentSizeTest() {
 
 		// create a copy op
+//		final UnaryHybridCF<IntervalView<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>> copy =
+//			(UnaryHybridCF) Hybrids.unaryCF(ops, CopyRAI.class,
+//				RandomAccessibleInterval.class, IntervalView.class);
 		final UnaryHybridCF<IntervalView<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>> copy =
-			(UnaryHybridCF) Hybrids.unaryCF(ops, CopyRAI.class,
-				RandomAccessibleInterval.class, IntervalView.class);
+			UnaryOp.op(ops, CopyRAI.class,
+				new Nil<UnaryHybridCF<IntervalView<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>>>()
+			{});
 
 		assertNotNull(copy);
 

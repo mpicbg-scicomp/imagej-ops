@@ -32,8 +32,8 @@ package net.imagej.ops.copy;
 
 import net.imagej.ops.Contingent;
 import net.imagej.ops.Ops;
+import net.imagej.ops.special.UnaryOp;
 import net.imagej.ops.special.chain.RAIs;
-import net.imagej.ops.special.computer.Computers;
 import net.imagej.ops.special.computer.UnaryComputerOp;
 import net.imagej.ops.special.function.UnaryFunctionOp;
 import net.imagej.ops.special.hybrid.AbstractUnaryHybridCF;
@@ -44,6 +44,7 @@ import net.imglib2.util.Intervals;
 import net.imglib2.util.Util;
 
 import org.scijava.plugin.Plugin;
+import org.scijava.type.Nil;
 
 /**
  * Copies a {@link RandomAccessibleInterval} into another
@@ -77,9 +78,11 @@ public class CopyRAI<T> extends
 		final Object inType = in() == null ? NativeType.class : Util
 			.getTypeFromInterval(in());
 
-		final UnaryComputerOp<?, ?> typeComputer = Computers.unary(ops(),
-			Ops.Copy.Type.class, outType, inType);
+//		final UnaryComputerOp<?, ?> typeComputer = Computers.unary(ops(),
+//			Ops.Copy.Type.class, outType, inType);
+		final UnaryComputerOp<T, T> typeComputer = UnaryOp.op(ops(), Ops.Copy.Type.class, new Nil<UnaryComputerOp<T, T>>() {});
 		mapComputer = RAIs.computer(ops(), Ops.Map.class, in(), typeComputer);
+//		fill("mapComputer", Ops.Map.class, in(), typeComputer);
 		createFunc = RAIs.function(ops(), Ops.Create.Img.class, in(), inType);
 
 	}

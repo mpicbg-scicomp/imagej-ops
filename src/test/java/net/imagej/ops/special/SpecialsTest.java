@@ -57,18 +57,6 @@ public class SpecialsTest extends AbstractOpTest {
 	public void testOpUnaryComputer() {
 	}
 
-	@Test
-	public void testFill() {
-		final Stuff<String> stuff = new Stuff<>();
-		final Set<String> inSet = new HashSet<>(Arrays.asList("Hello", "World"));
-		final List<String> outList = new ArrayList<>();
-		Specials.fill(ops, stuff, "setToList", SetToList.class, outList, inSet);
-		assertNotNull(stuff.setToList);
-		assertSame(SetToList.class, stuff.setToList.getClass());
-		assertSame(inSet, stuff.setToList.in());
-		assertSame(outList, stuff.setToList.out());
-	}
-
 	// -- Helper classes --
 
 	public static class Stuff<T> {

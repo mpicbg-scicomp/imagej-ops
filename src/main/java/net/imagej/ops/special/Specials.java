@@ -30,7 +30,6 @@
 
 package net.imagej.ops.special;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
 import net.imagej.ops.Op;
@@ -38,7 +37,6 @@ import net.imagej.ops.OpEnvironment;
 
 import org.scijava.type.Nil;
 import org.scijava.type.Types;
-import org.scijava.util.GenericUtils;
 
 /**
  * Utility class for looking up {@link SpecialOp}s in a type-safe way.
